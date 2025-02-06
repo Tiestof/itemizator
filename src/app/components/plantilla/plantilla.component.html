@@ -4,14 +4,16 @@
 <input type="file" (change)="onFileSelected($event)" accept=".json">
 
 <!-- Botón para guardar en Firebase -->
-<button (click)="guardarEnFirebase()" [disabled]="!plantillaString">Guardar en Firebase</button>
+<button (click)="guardarEnFirebase()" [disabled]="!plantillaString || cargando">
+  {{ cargando ? 'Guardando...' : 'Guardar en Firebase' }}
+</button>
 
-<!-- Mensaje de estado -->
+<!-- Mensajes de estado -->
 <p *ngIf="guardadoExitoso" class="success">✅ Plantilla guardada correctamente</p>
 <p *ngIf="errorAlGuardar" class="error">❌ Error al guardar la plantilla</p>
 
-<!-- Muestra la plantilla JSON de forma legible -->
-<pre>{{ plantillaString }}</pre>
+<!-- Mostrar la plantilla JSON -->
+<pre *ngIf="plantillaString">{{ plantillaString }}</pre>
 
 <!-- Listado de plantillas guardadas -->
 <h2>Plantillas Guardadas</h2>

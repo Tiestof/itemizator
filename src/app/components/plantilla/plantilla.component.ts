@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from 'src/app/services/firebase.service';
+import { CommonModule } from '@angular/common'; // ✅ Importamos CommonModule para *ngIf, *ngFor y json pipe
+import { FormsModule } from '@angular/forms'; // ✅ Necesario para manejar formularios
 
 @Component({
   selector: 'app-plantilla',
+  standalone: true, // ✅ Componente Standalone
   templateUrl: './plantilla.component.html',
-  styleUrls: ['./plantilla.component.scss']
+  styleUrls: ['./plantilla.component.scss'],
+  imports: [CommonModule, FormsModule], // ✅ Agregamos CommonModule para que funcione *ngIf, *ngFor y json pipe
 })
 export class PlantillaComponent implements OnInit {
   plantilla: any = {};
@@ -12,6 +16,7 @@ export class PlantillaComponent implements OnInit {
   plantillas: any[] = [];
   guardadoExitoso: boolean = false;
   errorAlGuardar: boolean = false;
+  cargando: boolean = false; // ✅ Indicador de carga
 
   constructor(private firebaseService: FirebaseService) {}
 
@@ -43,6 +48,7 @@ export class PlantillaComponent implements OnInit {
       return;
     }
 
+    this.cargando = true; // ✅ Mostrar indicador de carga
     this.firebaseService.guardarPlantilla(this.plantilla)
       .then(() => {
         console.log('Plantilla guardada en Firebase');
@@ -53,6 +59,9 @@ export class PlantillaComponent implements OnInit {
         console.error('Error guardando en Firebase', error);
         this.errorAlGuardar = true;
         this.guardadoExitoso = false;
+      })
+      .finally(() => {
+        this.cargando = false; // ✅ Ocultar indicador de carga
       });
   }
 }

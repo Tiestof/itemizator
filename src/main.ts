@@ -6,6 +6,9 @@ import { RouteReuseStrategy } from '@angular/router';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+import { importProvidersFrom } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms'; // ✅ Importar ReactiveFormsModule
+
 import { environment } from './environments/environment';
 import { routes } from './app/app.routes';
 
@@ -14,8 +17,7 @@ bootstrapApplication(AppComponent, {
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular(),
     provideRouter(routes, withPreloading(PreloadAllModules)),
-
-    // ✅ Configuración correcta de Firebase
+    importProvidersFrom(ReactiveFormsModule), // ✅ Se importa para formularios reactivos
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
