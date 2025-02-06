@@ -1,0 +1,50 @@
+<form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+    <label>Nombre</label>
+    <input type="text" formControlName="nombre" required />
+  
+    <label>RUT</label>
+    <input type="text" formControlName="rut" (input)="formatRut($event)" required />
+    <div *ngIf="registerForm.controls['rut'].invalid && registerForm.controls['rut'].touched">
+      RUT inválido (Debe cumplir con Módulo 11)
+    </div>
+  
+    <label>Correo</label>
+    <input type="text" formControlName="correo" (blur)="autocompleteEmail()" required />
+    <div *ngIf="registerForm.controls['correo'].invalid && registerForm.controls['correo'].touched">
+      Correo debe ser válido y terminar en &#64;maxisinformatica.com
+    </div>
+  
+    <label>Contraseña</label>
+    <div class="password-container">
+      <input [type]="showPassword ? 'text' : 'password'" formControlName="password" (input)="checkPasswordStrength()" required />
+      <button type="button" (click)="togglePasswordVisibility()">
+        {{ showPassword ? '👁️' : '🙈' }}
+      </button>
+    </div>
+  
+    <div class="password-warning" *ngIf="registerForm.controls['password'].touched && registerForm.controls['password'].invalid">
+      <p *ngIf="passwordErrors.minLength">⚠ La contraseña debe tener al menos 6 caracteres.</p>
+      <p *ngIf="passwordErrors.upperCase">⚠ Debe contener al menos una mayúscula.</p>
+      <p *ngIf="passwordErrors.lowerCase">⚠ Debe contener al menos una minúscula.</p>
+      <p *ngIf="passwordErrors.number">⚠ Debe contener al menos un número.</p>
+      <p *ngIf="passwordErrors.specialChar">⚠ Debe contener al menos un carácter especial.</p>
+    </div>
+  
+    <label>Rol</label>
+    <select formControlName="rol">
+      <option *ngFor="let role of roles" [value]="role.value">{{ role.label }}</option>
+    </select>
+  
+    <button type="submit" [disabled]="registerForm.invalid">Registrar</button>
+  
+    <!-- Mensaje de éxito o error -->
+    <p *ngIf="registroExitoso" class="success">✅ Usuario registrado correctamente</p>
+    <p *ngIf="errorRegistro" class="error">❌ Error al registrar el usuario</p>
+  </form>
+  
+  <!-- Listado de usuarios registrados -->
+  <h2>Usuarios Registrados</h2>
+  <ul>
+    <li *ngFor="let user of usuarios">{{ user.nombre }} - {{ user.correo }}</li>
+  </ul>
+  

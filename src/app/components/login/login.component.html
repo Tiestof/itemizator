@@ -1,0 +1,22 @@
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>Iniciar Sesión</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <form (ngSubmit)="login()">
+      <ion-item>
+        <ion-label position="floating">Correo</ion-label>
+        <ion-input type="email" [(ngModel)]="email" name="email" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Contraseña</ion-label>
+        <ion-input type="password" [(ngModel)]="password" name="password" required></ion-input>
+      </ion-item>
+
+      <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+
+      <ion-button expand="full" type="submit">Ingresar</ion-button>
+    </form>
+  </ion-card-content>
+</ion-card>

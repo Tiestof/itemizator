@@ -1,0 +1,20 @@
+<h1>Página de Cargar Plantilla</h1>
+
+<!-- Input para subir archivos JSON -->
+<input type="file" (change)="onFileSelected($event)" accept=".json">
+
+<!-- Botón para guardar en Firebase -->
+<button (click)="guardarEnFirebase()" [disabled]="!plantillaString">Guardar en Firebase</button>
+
+<!-- Mensaje de estado -->
+<p *ngIf="guardadoExitoso" class="success">✅ Plantilla guardada correctamente</p>
+<p *ngIf="errorAlGuardar" class="error">❌ Error al guardar la plantilla</p>
+
+<!-- Muestra la plantilla JSON de forma legible -->
+<pre>{{ plantillaString }}</pre>
+
+<!-- Listado de plantillas guardadas -->
+<h2>Plantillas Guardadas</h2>
+<ul>
+  <li *ngFor="let p of plantillas">{{ p | json }}</li>
+</ul>
