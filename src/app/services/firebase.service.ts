@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@angular/fire/auth';
-import { Firestore, collection, addDoc, collectionData } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, collectionData, query, where, getDocs } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -15,7 +15,21 @@ export class FirebaseService {
 
   async agregarUsuario(data: any) {
     const usersCollection = collection(this.firestore, 'usuarios');
+
+    // Verifica si el usuario ya existe con el mismo RUT
+    const q = query(usersCollection, where("rut", "==", data.rut));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      throw new Error("El usuario con este RUT ya existe.");
+    }
+
     return addDoc(usersCollection, data);
+  }
+
+  obtenerUsuarios(): Observable<any[]> {
+    const usersCollection = collection(this.firestore, 'usuarios');
+    return collectionData(usersCollection, { idField: 'id' }) as Observable<any[]>;
   }
 
   obtenerPlantillas(): Observable<any[]> {
